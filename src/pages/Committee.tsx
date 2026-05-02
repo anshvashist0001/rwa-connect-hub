@@ -6,20 +6,11 @@ import { Phone, Mail, UserCircle } from "lucide-react";
 
 const API_BASE = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000';
 
-const mockCommittee: CommitteeMember[] = [
-  { id: 1, name: "Rajesh Gupta", designation: "President", phone: "9876500001", email: "president@shyamkunj.com", photo_url: null, bio: "Leading RWA Shyam Kunj since 2022 with a focus on infrastructure and resident welfare.", display_order: 1, is_active: true },
-  { id: 2, name: "Kavita Sharma", designation: "Vice President", phone: "9876500002", email: "vp@shyamkunj.com", photo_url: null, bio: "Oversees community events and resident relations.", display_order: 2, is_active: true },
-  { id: 3, name: "Amit Patel", designation: "Secretary", phone: "9876500003", email: "secretary@shyamkunj.com", photo_url: null, bio: "Manages correspondence, minutes of meetings, and official records.", display_order: 3, is_active: true },
-  { id: 4, name: "Sunita Mehta", designation: "Treasurer", phone: "9876500004", email: "treasurer@shyamkunj.com", photo_url: null, bio: "Responsible for financial management, fee collection, and audits.", display_order: 4, is_active: true },
-  { id: 5, name: "Vikram Singh", designation: "Joint Secretary", phone: "9876500005", email: null, photo_url: null, bio: "Assists the Secretary and coordinates with maintenance teams.", display_order: 5, is_active: true },
-  { id: 6, name: "Anita Joshi", designation: "Member", phone: "9876500006", email: null, photo_url: null, bio: "Handles grievances and resident feedback.", display_order: 6, is_active: true },
-];
 
 const Committee = () => {
-  const { data: committee = mockCommittee } = useQuery({
+  const { data: committee = [] } = useQuery({
     queryKey: ["committee"],
     queryFn: committeeApi.getAll,
-    placeholderData: mockCommittee,
   });
 
   const active = committee.filter((m) => m.is_active);

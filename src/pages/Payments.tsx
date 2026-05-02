@@ -89,7 +89,7 @@ const Payments = () => {
         return result.length > 0 ? result : [];
       } catch {
         const { demoPayments } = await import("@/lib/demoStore");
-        return demoPayments.getAll().filter((p) => p.phone === checkPhone);
+        return demoPayments.getAll().filter((p) => String(p.phone) === String(checkPhone));
       }
     },
     enabled: false,
@@ -111,7 +111,7 @@ const Payments = () => {
     if (!formData.amount) { e.amount = "Amount is required"; valid = false; }
     else if (parseFloat(formData.amount) <= 0) { e.amount = "Amount must be greater than 0"; valid = false; }
 
-    if (!file) { e.file = "Payment screenshot is required"; valid = false; }
+    // if (!file) { e.file = "Payment screenshot is required"; valid = false; }
 
     setErrors(e);
     return valid;
@@ -336,7 +336,7 @@ const Payments = () => {
                 {/* Screenshot */}
                 <div>
                   <label className="text-sm font-medium mb-1.5 block">
-                    Payment Screenshot <span className="text-destructive">*</span>
+                    Payment Screenshot (Optional)
                   </label>
                   <label className={`flex flex-col items-center justify-center gap-2 border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
                     submitted && errors.file

@@ -67,7 +67,7 @@ export const gPaymentsApi = {
         const q = params.search.toLowerCase();
         filtered = filtered.filter(p =>
           p.name.toLowerCase().includes(q) ||
-          p.phone.includes(q) ||
+          String(p.phone).includes(q) ||
           p.block.toLowerCase().includes(q) ||
           p.house_no.toLowerCase().includes(q)
         );
@@ -97,7 +97,7 @@ export const gPaymentsApi = {
   },
 
   checkStatus: (phone: string): Promise<Payment[]> =>
-    gFetch<Payment[]>('getPayments').then(rows => rows.filter(p => p.phone === phone)),
+    gFetch<Payment[]>('getPayments').then(rows => rows.filter(p => String(p.phone) === String(phone))),
 
   updateStatus: (id: number, status: string, remarks?: string): Promise<Payment> =>
     gFetch<Payment>('updatePayment', {
@@ -229,7 +229,7 @@ export const gMembersApi = {
     gFetch<Member[]>('getMembers').then(rows => {
       if (!search) return rows;
       const q = search.toLowerCase();
-      return rows.filter(m => m.name.toLowerCase().includes(q) || m.phone.includes(q));
+      return rows.filter(m => m.name.toLowerCase().includes(q) || String(m.phone).includes(q));
     }),
 
   create: async (formData: FormData): Promise<Member> => {

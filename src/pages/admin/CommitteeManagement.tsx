@@ -274,7 +274,7 @@ const CommitteeManagement = () => {
                   value={form.email}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
                   className="w-full px-4 py-2.5 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                  placeholder="president@shyamkunj.com"
+                  placeholder="president@gmail.com"
                 />
               </div>
 

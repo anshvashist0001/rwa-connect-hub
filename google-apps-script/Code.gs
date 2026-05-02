@@ -193,8 +193,7 @@ function getAll(sheetName) {
     rows.push(row);
   }
 
-  // Return newest first
-  rows.reverse();
+  // Return in insertion order (oldest first, newest at the bottom)
   return rows;
 }
 

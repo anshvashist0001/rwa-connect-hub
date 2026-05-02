@@ -4,7 +4,7 @@ import AdminLayout from "@/components/admin/AdminLayout";
 import { membersApi, type Member } from "@/lib/api";
 import { demoMembers } from "@/lib/demoStore";
 import { Button } from "@/components/ui/button";
-import { Plus, Pencil, Trash2, Search, Upload, X, UserCircle } from "lucide-react";
+import { Plus, Pencil, Trash2, Search, Upload, X, UserCircle, Download } from "lucide-react";
 import { toast } from "sonner";
 
 const API_BASE = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000';
@@ -63,6 +63,33 @@ const MemberManagement = () => {
     saveMutation.mutate(fd);
   };
 
+  const handleExport = () => {
+    if (!members || members.length === 0) return toast.error("No members to export");
+
+    const headers = ["ID", "Name", "Block", "House No", "Phone", "Email", "Status"];
+    const csvContent = [
+      headers.join(","),
+      ...members.map(m => [
+        m.id,
+        `"${m.name}"`,
+        m.block,
+        m.house_no,
+        m.phone,
+        `"${m.email || ""}"`,
+        m.is_active ? "Active" : "Inactive"
+      ].join(","))
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.setAttribute('download', `members_export_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    toast.success("Members exported successfully");
+  };
+
   const openEdit = (m: Member) => {
     setEditing(m);
     setForm({ name: m.name, phone: m.phone, block: m.block, house_no: m.house_no, email: m.email || "" });
@@ -82,9 +109,14 @@ const MemberManagement = () => {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold">Members</h2>
-          <Button onClick={() => setShowForm(true)} variant="accent" size="sm" className="gap-2">
-            <Plus className="w-4 h-4" /> Add Member
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button onClick={handleExport} variant="outline" size="sm" className="gap-2">
+              <Download className="w-4 h-4" /> Export CSV
+            </Button>
+            <Button onClick={() => setShowForm(true)} variant="accent" size="sm" className="gap-2">
+              <Plus className="w-4 h-4" /> Add Member
+            </Button>
+          </div>
         </div>
 
         <div className="relative">
