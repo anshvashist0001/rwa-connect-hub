@@ -14,7 +14,8 @@ async function init() {
 
     // Seed default admin
     const username = process.env.ADMIN_USERNAME || 'admin';
-    const password = process.env.ADMIN_PASSWORD || 'admin123';
+    const password = process.env.ADMIN_PASSWORD;
+    if (!password || password.length < 12) throw new Error('Set ADMIN_PASSWORD to at least 12 characters.');
     const name = process.env.ADMIN_NAME || 'RWA Administrator';
 
     const exists = await client.query('SELECT id FROM admins WHERE username = $1', [username]);
@@ -24,7 +25,7 @@ async function init() {
         'INSERT INTO admins (username, password_hash, name, role) VALUES ($1, $2, $3, $4)',
         [username, hash, name, 'superadmin']
       );
-      console.log(`Admin created: ${username} / ${password}`);
+      console.log(`Admin created: ${username}`);
     } else {
       console.log('Admin already exists, skipping seed.');
     }
