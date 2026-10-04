@@ -22,7 +22,7 @@ const AdminLogin = () => {
     setError("");
     setLoading(true);
 
-    // Try real backend first, fall back to demo mode
+    // Demo access must be explicitly enabled for local previews.
     try {
       const { token, admin } = await authApi.login(form.username, form.password);
       localStorage.setItem("rwa_admin_token", token);
@@ -33,12 +33,12 @@ const AdminLogin = () => {
       // Backend unavailable — use demo credentials
     }
 
-    if (form.username === "admin" && form.password === "admin123") {
+    if (import.meta.env.VITE_DEMO_MODE === "true" && form.username === "admin" && form.password === "admin123") {
       localStorage.setItem("rwa_admin_token", "demo-token");
       localStorage.setItem("rwa_admin", JSON.stringify({ id: 1, username: "admin", name: "RWA Administrator", role: "superadmin" }));
       navigate("/admin/dashboard");
     } else {
-      setError("Invalid credentials. Use admin / admin123");
+      setError("Sign-in failed. Check your credentials and that the API is running.");
     }
     setLoading(false);
   };
